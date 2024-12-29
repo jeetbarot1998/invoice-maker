@@ -139,7 +139,7 @@ const InvoiceForm = () => {
       pdf.addImage(
         imgData,
         'PNG',
-        0,
+        8,
         0,
         A4_WIDTH_MM,
         A4_HEIGHT_MM,
