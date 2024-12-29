@@ -87,31 +87,74 @@ const InvoiceForm = () => {
 
   const generatePDF = async () => {
     try {
-      const canvas = await html2canvas(invoiceRef.current, {
-        scale: 2, // Higher quality
-        logging: false,
-        useCORS: true,
-        allowTaint: true
-      });
+      const invoiceElement = document.getElementById('invoice-template');
       
-      const imgData = canvas.toDataURL('image/png');
+      if (!invoiceElement) {
+        throw new Error('Invoice template element not found');
+      }
+  
+      // A4 dimensions in mm
+      const A4_WIDTH_MM = 210;
+      const A4_HEIGHT_MM = 297;
+  
+      // Convert mm to pixels (assuming 96 DPI)
+      const MM_TO_PX = 3.7795275591;  // 1mm = 3.7795275591 pixels
+      
+      const canvasOptions = {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        width: A4_WIDTH_MM * MM_TO_PX,
+        height: A4_HEIGHT_MM * MM_TO_PX,
+        windowWidth: A4_WIDTH_MM * MM_TO_PX,
+        windowHeight: A4_HEIGHT_MM * MM_TO_PX,
+        onclone: (clonedDoc) => {
+          const clonedElement = clonedDoc.getElementById('invoice-template');
+          if (clonedElement) {
+            // Ensure the cloned element maintains A4 dimensions
+            clonedElement.style.width = `${A4_WIDTH_MM}mm`;
+            clonedElement.style.height = `${A4_HEIGHT_MM}mm`;
+            clonedElement.style.margin = '0';
+            clonedElement.style.padding = '20mm'; // Consistent padding
+          }
+        }
+      };
+  
+      // Generate canvas
+      const canvas = await html2canvas(invoiceElement, canvasOptions);
+  
+      // Create PDF with A4 dimensions
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
-        format: 'a4'
+        format: 'a4',
+        compress: true
       });
-      
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, '', 'FAST');
+  
+      // Convert canvas to image
+      const imgData = canvas.toDataURL('image/png', 1.0);
+  
+      // Add image to PDF with exact A4 dimensions
+      pdf.addImage(
+        imgData,
+        'PNG',
+        0,
+        0,
+        A4_WIDTH_MM,
+        A4_HEIGHT_MM,
+        undefined,
+        'FAST'
+      );
+  
       return pdf;
     } catch (error) {
       console.error('Error generating PDF:', error);
       throw error;
     }
   };
-
+  
+  // Download function
   const downloadPDF = async () => {
     try {
       setStatus({ message: 'Generating PDF...', type: 'info' });
@@ -119,19 +162,21 @@ const InvoiceForm = () => {
       pdf.save(`Invoice_${invoiceData.invoiceNumber || 'draft'}.pdf`);
       setStatus({ message: 'PDF downloaded successfully!', type: 'success' });
     } catch (error) {
-      setStatus({ message: 'Error downloading PDF', type: 'error' });
+      setStatus({ message: 'Error downloading PDF: ' + error.message, type: 'error' });
+      console.error('Download error:', error);
     }
   };
-
+  
+  // Share function
   const sharePDF = async () => {
     try {
       setStatus({ message: 'Preparing PDF for sharing...', type: 'info' });
       const pdf = await generatePDF();
       const pdfBlob = pdf.output('blob');
-      const file = new File([pdfBlob], `Invoice_${invoiceData.invoiceNumber || 'draft'}.pdf`, { 
-        type: 'application/pdf' 
+      const file = new File([pdfBlob], `Invoice_${invoiceData.invoiceNumber || 'draft'}.pdf`, {
+        type: 'application/pdf'
       });
-
+  
       if (navigator.share && navigator.canShare({ files: [file] })) {
         await navigator.share({
           files: [file],
@@ -142,7 +187,7 @@ const InvoiceForm = () => {
       } else {
         const pdfUrl = URL.createObjectURL(pdfBlob);
         window.open(pdfUrl, '_blank');
-        setStatus({ 
+        setStatus({
           message: 'PDF opened in new tab. You can now save and share it manually.',
           type: 'info'
         });
@@ -151,8 +196,8 @@ const InvoiceForm = () => {
       if (error.name === 'AbortError') {
         setStatus({ message: 'Sharing cancelled', type: 'info' });
       } else {
-        setStatus({ message: 'Error sharing PDF', type: 'error' });
-        console.error('Error:', error);
+        setStatus({ message: 'Error sharing PDF: ' + error.message, type: 'error' });
+        console.error('Sharing error:', error);
       }
     }
   };
