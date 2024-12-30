@@ -94,9 +94,6 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
           <p className="text-lg md:text-xl font-bold">BALANCE DUE: KWD {calculateTotal()}</p>
         </div>
 
-        <div className="text-center text-sm text-gray-500 mt-8">
-          <p>Thank you for your business</p>
-        </div>
       </div>
     </div>
   );
