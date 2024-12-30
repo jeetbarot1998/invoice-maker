@@ -5,9 +5,9 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
     // Updated wrapper with flex centering
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       {/* Fixed-size invoice container with explicit A4 dimensions */}
-      <div 
-        ref={ref} 
-        id="invoice-template" 
+      <div
+        ref={ref}
+        id="invoice-template"
         className="bg-white shadow-lg"
         style={{
           width: '210mm',
@@ -24,46 +24,46 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
         {/* Company Header */}
         <div className="flex flex justify-between">
 
-        <div className="text-left mb-8">
-          <h1 className="text-2xl font-bold">Electronics & Accessories</h1>
-          <p className="text-gray-600">Abbas Kala</p>
-          <p className="text-gray-600">VAT # 65553025</p>
-          <p className="text-gray-600">Salmiya, Kuwait</p>
-          <p className="text-gray-600">65553025</p>
-        </div>
+          <div className="text-left mb-8">
+            <h1 className="text-2xl font-bold">Electronics & Accessories</h1>
+            <p className="text-gray-600">Abbas Kala</p>
+            <p className="text-gray-600">VAT # 65553025</p>
+            <p className="text-gray-600">Salmiya, Kuwait</p>
+            <p className="text-gray-600">65553025</p>
+          </div>
 
-        {/* Invoice Details Section */}
-        <div className="flex justify-between mb-8">
-        <div className="text-right">
-            <div className="mb-1">
-              <p><strong>INVOICE #</strong></p>
-              <p className="mt-1 text-lg">{invoiceData.invoiceNumber}</p>
-            </div>
-            <div className="mb-1">
-              <p><strong>DATE</strong></p>
-              <p className="mt-1 text-lg">{invoiceData.date}</p>
-            </div>
-            <div className="mb-1">
-              <p><strong>DUE</strong></p>
-              <p className="mt-1 text-lg">On Receipt</p>
-            </div>
-            <div className="mb-1">
-              <p><strong>BALANCE DUE</strong></p>
-              <p className="mt-1 text-lg">{calculateTotal()}</p>
+          {/* Invoice Details Section */}
+          <div className="flex justify-between mb-8">
+            <div className="text-right">
+              <div className="mb-1">
+                <p><strong>INVOICE #</strong></p>
+                <p className="mt-1 text-lg">{invoiceData.invoiceNumber}</p>
+              </div>
+              <div className="mb-1">
+                <p><strong>DATE</strong></p>
+                <p className="mt-1 text-lg">{invoiceData.date}</p>
+              </div>
+              <div className="mb-1">
+                <p><strong>DUE</strong></p>
+                <p className="mt-1 text-lg">On Receipt</p>
+              </div>
+              <div className="mb-1">
+                <p><strong>BALANCE DUE</strong></p>
+                <p className="mt-1 text-lg">{calculateTotal()}</p>
+              </div>
             </div>
           </div>
-        </div>
         </div>
 
         <div className="border-b-2 border-amber-800 my-4"></div>
 
-        <div className="text-left">  
+        <div className="text-left">
           <div className="mb-1">
             <p><strong>BILL TO</strong></p>
             <p className="mt-1 text-lg">{invoiceData.billTo}</p>
           </div>
         </div>
-        
+
         <div className="border-b-2 border-amber-800 my-4"></div>
 
 

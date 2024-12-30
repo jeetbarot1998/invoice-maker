@@ -5,12 +5,13 @@ import InvoiceTemplate from './InvoiceTemplate';
 import { Download, Share2 } from 'lucide-react';
 
 const InvoiceForm = () => {
-  const [showInvoice, setShowInvoice] = useState(true);
+  // Changed initial state to false to show form first
+  const [showInvoice, setShowInvoice] = useState(false);
   const [invoiceData, setInvoiceData] = useState({
     invoiceNumber: '',
     date: new Date().toISOString().split('T')[0],
     billTo: '',
-    whatsappNumber: ''
+    whatsappNumber: '' // Added whatsapp number field
   });
 
   const [items, setItems] = useState([{
@@ -29,7 +30,7 @@ const InvoiceForm = () => {
     const numRate = parseFloat(rate) || 0;
     const numQuantity = parseFloat(quantity) || 0;
     const numDiscount = parseFloat(discount) || 0;
-    return (numRate * numQuantity * (1 - numDiscount/100)).toFixed(3);
+    return (numRate * numQuantity * (1 - numDiscount / 100)).toFixed(3);
   };
 
   const handleInputChange = (e) => {
@@ -44,9 +45,9 @@ const InvoiceForm = () => {
     setItems(prevItems => {
       const newItems = prevItems.map((item, i) => {
         if (i !== index) return item;
-        
+
         const updatedItem = { ...item, [field]: value };
-        
+
         if (field === 'rate' || field === 'quantity' || field === 'discount') {
           updatedItem.amount = calculateAmount(
             field === 'rate' ? value : item.rate,
@@ -54,7 +55,7 @@ const InvoiceForm = () => {
             field === 'discount' ? value : item.discount
           );
         }
-        
+
         return updatedItem;
       });
       return newItems;
@@ -88,18 +89,18 @@ const InvoiceForm = () => {
   const generatePDF = async () => {
     try {
       const invoiceElement = document.getElementById('invoice-template');
-      
+
       if (!invoiceElement) {
         throw new Error('Invoice template element not found');
       }
-  
+
       // A4 dimensions in mm
       const A4_WIDTH_MM = 210;
       const A4_HEIGHT_MM = 297;
-  
+
       // Convert mm to pixels (assuming 96 DPI)
       const MM_TO_PX = 3.7795275591;  // 1mm = 3.7795275591 pixels
-      
+
       const canvasOptions = {
         scale: 2,
         useCORS: true,
@@ -120,10 +121,10 @@ const InvoiceForm = () => {
           }
         }
       };
-  
+
       // Generate canvas
       const canvas = await html2canvas(invoiceElement, canvasOptions);
-  
+
       // Create PDF with A4 dimensions
       const pdf = new jsPDF({
         orientation: 'portrait',
@@ -131,10 +132,10 @@ const InvoiceForm = () => {
         format: 'a4',
         compress: true
       });
-  
+
       // Convert canvas to image
       const imgData = canvas.toDataURL('image/png', 1.0);
-  
+
       // Add image to PDF with exact A4 dimensions
       pdf.addImage(
         imgData,
@@ -146,14 +147,14 @@ const InvoiceForm = () => {
         undefined,
         'FAST'
       );
-  
+
       return pdf;
     } catch (error) {
       console.error('Error generating PDF:', error);
       throw error;
     }
   };
-  
+
   // Download function
   const downloadPDF = async () => {
     try {
@@ -166,7 +167,7 @@ const InvoiceForm = () => {
       console.error('Download error:', error);
     }
   };
-  
+
   // Share function
   const sharePDF = async () => {
     try {
@@ -176,7 +177,7 @@ const InvoiceForm = () => {
       const file = new File([pdfBlob], `Invoice_${invoiceData.invoiceNumber || 'draft'}.pdf`, {
         type: 'application/pdf'
       });
-  
+
       if (navigator.share && navigator.canShare({ files: [file] })) {
         await navigator.share({
           files: [file],
@@ -327,7 +328,7 @@ const InvoiceForm = () => {
             >
               Edit Invoice
             </button>
-            
+
             <button
               onClick={downloadPDF}
               className="flex items-center gap-2 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
@@ -335,29 +336,28 @@ const InvoiceForm = () => {
               <Download size={20} />
               Download PDF
             </button>
-            
+
             <button
               onClick={sharePDF}
               className="flex items-center gap-2 bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
             >
               <Share2 size={20} />
-              Share PDF
+              Share via WhatsApp
             </button>
           </div>
-          
+
           <InvoiceTemplate
             ref={invoiceRef}
             invoiceData={invoiceData}
             items={items}
             calculateTotal={calculateTotal}
           />
-          
+
           {status.message && (
-            <div className={`mt-4 p-4 rounded ${
-              status.type === 'error' ? 'bg-red-100 text-red-700' : 
+            <div className={`mt-4 p-4 rounded ${status.type === 'error' ? 'bg-red-100 text-red-700' :
               status.type === 'success' ? 'bg-green-100 text-green-700' :
-              'bg-blue-100 text-blue-700'
-            }`}>
+                'bg-blue-100 text-blue-700'
+              }`}>
               {status.message}
             </div>
           )}
