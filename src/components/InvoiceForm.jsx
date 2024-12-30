@@ -321,9 +321,9 @@ const InvoiceForm = () => {
         </div>
       ) : (
         <div>
-          <div className="mb-6 flex justify-end space-x-4 no-print">
+          <div className="mb-6 flex flex-col md:flex-row md:justify-end md:space-x-4 space-y-3 md:space-y-0 no-print">
             <button
-              className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
+              className="w-full md:w-auto bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 text-sm md:text-base"
               onClick={() => setShowInvoice(false)}
             >
               Edit Invoice
@@ -331,17 +331,17 @@ const InvoiceForm = () => {
 
             <button
               onClick={downloadPDF}
-              className="flex items-center gap-2 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+              className="w-full md:w-auto flex items-center justify-center gap-2 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 text-sm md:text-base"
             >
-              <Download size={20} />
+              <Download size={18} />
               Download PDF
             </button>
 
             <button
               onClick={sharePDF}
-              className="flex items-center gap-2 bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600"
+              className="w-full md:w-auto flex items-center justify-center gap-2 bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 text-sm md:text-base"
             >
-              <Share2 size={20} />
+              <Share2 size={18} />
               Share via WhatsApp
             </button>
           </div>
