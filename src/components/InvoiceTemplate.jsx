@@ -38,14 +38,14 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
           </div>
         </div>
 
-        <div className="border-b-2 border-amber-800 my-4"></div>
+        <div className="border-b-2 border-grey-1000 my-4"></div>
 
-        <div className="mb-4">
+        <div className="mb-4 text-left">
           <p className="font-bold">BILL TO</p>
           <p className="text-base md:text-lg mt-1">{invoiceData.billTo}</p>
         </div>
 
-        <div className="border-b-2 border-amber-800 my-4"></div>
+        <div className="border-b-2 border-grey-1000 my-4"></div>
 
         <div className="mb-8 overflow-x-auto">
           <table className="w-full border-collapse hidden md:table">
