@@ -9,7 +9,7 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
         className="bg-white shadow-lg w-full max-w-4xl p-4 md:p-8 mx-auto"
       >
         <div className="flex flex-col md:flex-row md:justify-between gap-6 md:gap-8">
-          <div className="mb-4 md:mb-8">
+          <div className="mb-4 md:mb-8 text-left">
             <h1 className="text-xl md:text-2xl font-bold">Electronics & Accessories</h1>
             <p className="text-gray-600">Abbas Kala</p>
             <p className="text-gray-600">Salmiya, Kuwait</p>
