@@ -24,7 +24,6 @@ const InvoiceForm = () => {
     amount: 0
   }]);
 
-  const [status, setStatus] = useState({ message: '', type: '' });
   const invoiceRef = useRef(null);
 
   const calculateAmount = (rate, quantity, discount) => {
