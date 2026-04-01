@@ -8,12 +8,13 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
         id="invoice-template"
         className="bg-white shadow-lg w-full max-w-4xl p-4 md:p-8 mx-auto"
       >
+
         <div className="flex flex-col md:flex-row md:justify-between gap-6 md:gap-8">
           <div className="mb-4 md:mb-8 text-left">
-            <h1 className="text-xl md:text-2xl font-bold">Electronics & Accessories</h1>
-            <p className="text-gray-600">Abbas Kala</p>
-            <p className="text-gray-600">Salmiya, Kuwait</p>
-            <p className="text-gray-600">65553025</p>
+            <h1 className="text-xl md:text-2xl font-bold">Saree & Clothing</h1>
+            <p className="text-gray-600">Mohammadi Saree House</p>
+            <p className="text-gray-600">Kuwait</p>
+            <p className="text-gray-600">55127786</p>
           </div>
 
           <div className="mb-4 md:mb-8 md:text-right">
@@ -48,6 +49,8 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
         <div className="border-b-2 border-grey-1000 my-4"></div>
 
         <div className="mb-8 overflow-x-auto">
+
+          {/* DESKTOP TABLE */}
           <table className="w-full border-collapse hidden md:table">
             <thead className="bg-gray-50">
               <tr>
@@ -55,9 +58,11 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
                 <th className="border p-2 text-right w-1/5">RATE (KWD)</th>
                 <th className="border p-2 text-right w-1/5">QTY</th>
                 <th className="border p-2 text-right w-1/5">DISCOUNT (%)</th>
+                <th className="border p-2 text-right w-1/5">CASH ?</th> {/* ✅ ADDED */}
                 <th className="border p-2 text-right w-1/5">AMOUNT (KWD)</th>
               </tr>
             </thead>
+
             <tbody>
               {items.map((item) => (
                 <tr key={item.id}>
@@ -65,23 +70,32 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
                   <td className="border p-2 text-right">{parseFloat(item.rate).toFixed(3)}</td>
                   <td className="border p-2 text-right">{item.quantity}</td>
                   <td className="border p-2 text-right">{item.discount}</td>
+                  <td className="border p-2 text-right">{item.cash}</td> {/* ✅ ADDED */}
                   <td className="border p-2 text-right">{item.amount}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
+          {/* MOBILE VIEW */}
           <div className="md:hidden space-y-4">
             {items.map((item) => (
               <div key={item.id} className="border p-4 rounded-lg bg-white">
                 <p className="font-bold mb-2">{item.description}</p>
+
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <p className="text-gray-600">Rate:</p>
                   <p className="text-right">{parseFloat(item.rate).toFixed(3)} KWD</p>
+
                   <p className="text-gray-600">Quantity:</p>
                   <p className="text-right">{item.quantity}</p>
+
                   <p className="text-gray-600">Discount:</p>
                   <p className="text-right">{item.discount}%</p>
+
+                  <p className="text-gray-600">Cash:</p> {/* ✅ ADDED */}
+                  <p className="text-right">{item.cash}</p>
+
                   <p className="text-gray-600 font-bold">Amount:</p>
                   <p className="text-right font-bold">{item.amount} KWD</p>
                 </div>
@@ -91,7 +105,9 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
         </div>
 
         <div className="text-right mb-8">
-          <p className="text-lg md:text-xl font-bold">BALANCE DUE: KWD {calculateTotal()}</p>
+          <p className="text-lg md:text-xl font-bold">
+            BALANCE DUE: KWD {calculateTotal()}
+          </p>
         </div>
 
       </div>
@@ -100,5 +116,4 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
 });
 
 InvoiceTemplate.displayName = 'InvoiceTemplate';
-
 export default InvoiceTemplate;
