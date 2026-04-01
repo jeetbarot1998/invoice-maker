@@ -21,45 +21,43 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
             <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
               <div>
                 <p className="font-bold">INVOICE #</p>
-                <p className="text-base md:text-lg">{invoiceData.invoiceNumber}</p>
+                <p>{invoiceData.invoiceNumber}</p>
               </div>
               <div>
                 <p className="font-bold">DATE</p>
-                <p className="text-base md:text-lg">{invoiceData.date}</p>
+                <p>{invoiceData.date}</p>
               </div>
               <div>
                 <p className="font-bold">DUE</p>
-                <p className="text-base md:text-lg">On Receipt</p>
+                <p>On Receipt</p>
               </div>
               <div>
                 <p className="font-bold">BALANCE DUE</p>
-                <p className="text-base md:text-lg">{calculateTotal()}</p>
+                <p>{calculateTotal()}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="border-b-2 border-grey-1000 my-4"></div>
+        <div className="border-b-2 my-4"></div>
 
-        <div className="mb-4 text-left">
+        <div className="mb-4">
           <p className="font-bold">BILL TO</p>
-          <p className="text-base md:text-lg mt-1">{invoiceData.billTo}</p>
+          <p>{invoiceData.billTo}</p>
         </div>
 
-        <div className="border-b-2 border-grey-1000 my-4"></div>
+        <div className="border-b-2 my-4"></div>
 
         <div className="mb-8 overflow-x-auto">
-
-          {/* DESKTOP TABLE */}
           <table className="w-full border-collapse hidden md:table">
-            <thead className="bg-gray-50">
+            <thead>
               <tr>
-                <th className="border p-2 text-left w-2/5">DESCRIPTION</th>
-                <th className="border p-2 text-right w-1/5">RATE (KWD)</th>
-                <th className="border p-2 text-right w-1/5">QTY</th>
-                <th className="border p-2 text-right w-1/5">DISCOUNT (%)</th>
-                <th className="border p-2 text-right w-1/5">CASH ?</th> {/* ✅ ADDED */}
-                <th className="border p-2 text-right w-1/5">AMOUNT (KWD)</th>
+                <th className="border p-2 text-left">DESCRIPTION</th>
+                <th className="border p-2 text-right">RATE</th>
+                <th className="border p-2 text-right">QTY</th>
+                <th className="border p-2 text-right">DISCOUNT</th>
+                <th className="border p-2 text-right">CASH</th> {/* ✅ */}
+                <th className="border p-2 text-right">AMOUNT</th>
               </tr>
             </thead>
 
@@ -67,47 +65,33 @@ const InvoiceTemplate = React.forwardRef(({ invoiceData, items, calculateTotal }
               {items.map((item) => (
                 <tr key={item.id}>
                   <td className="border p-2">{item.description}</td>
-                  <td className="border p-2 text-right">{parseFloat(item.rate).toFixed(3)}</td>
+                  <td className="border p-2 text-right">{item.rate}</td>
                   <td className="border p-2 text-right">{item.quantity}</td>
                   <td className="border p-2 text-right">{item.discount}</td>
-                  <td className="border p-2 text-right">{item.cash}</td> {/* ✅ ADDED */}
+                  <td className="border p-2 text-right">{item.cash}</td> {/* ✅ */}
                   <td className="border p-2 text-right">{item.amount}</td>
                 </tr>
               ))}
             </tbody>
           </table>
 
-          {/* MOBILE VIEW */}
           <div className="md:hidden space-y-4">
             {items.map((item) => (
-              <div key={item.id} className="border p-4 rounded-lg bg-white">
-                <p className="font-bold mb-2">{item.description}</p>
+              <div key={item.id} className="border p-4 rounded-lg">
+                <p className="font-bold">{item.description}</p>
 
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  <p className="text-gray-600">Rate:</p>
-                  <p className="text-right">{parseFloat(item.rate).toFixed(3)} KWD</p>
-
-                  <p className="text-gray-600">Quantity:</p>
-                  <p className="text-right">{item.quantity}</p>
-
-                  <p className="text-gray-600">Discount:</p>
-                  <p className="text-right">{item.discount}%</p>
-
-                  <p className="text-gray-600">Cash:</p> {/* ✅ ADDED */}
-                  <p className="text-right">{item.cash}</p>
-
-                  <p className="text-gray-600 font-bold">Amount:</p>
-                  <p className="text-right font-bold">{item.amount} KWD</p>
-                </div>
+                <p>Rate: {item.rate}</p>
+                <p>Qty: {item.quantity}</p>
+                <p>Discount: {item.discount}%</p>
+                <p>Cash: {item.cash} KWD</p> {/* ✅ */}
+                <p>Amount: {item.amount} KWD</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="text-right mb-8">
-          <p className="text-lg md:text-xl font-bold">
-            BALANCE DUE: KWD {calculateTotal()}
-          </p>
+        <div className="text-right">
+          <p className="font-bold">BALANCE DUE: KWD {calculateTotal()}</p>
         </div>
 
       </div>
